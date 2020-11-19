@@ -1,0 +1,51 @@
+<template>
+  <b-navbar toggleable="lg"  class="navbar-horizontal header">
+    <b-navbar-brand @click="goToHome" class="navbar">Project Name</b-navbar-brand>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav class="ml-auto">
+        <li class="nav-item">
+          <router-link 
+            :to="{ name: 'Login' }"
+            class="heading nav-link"
+          >Login</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link 
+            :to="{ name: 'Signup' }"
+            class="heading nav-link"
+          >Register</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link 
+            :to="{ name: 'Help' }"
+            class="heading nav-link"
+          >Help/FAQs</router-link>
+        </li>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
+</template>
+<script>
+  export default {
+    name: 'Header',
+    methods: {
+      goToHome () {
+        this.$router.push('/')
+      }
+    }
+  }
+</script>
+<style>
+.navbar {
+  cursor: pointer;
+  background: #edc7b7;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.heading {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+</style>
