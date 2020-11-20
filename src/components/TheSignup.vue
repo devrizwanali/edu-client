@@ -45,7 +45,8 @@
       >
         <b-form-input
           id="password"
-          v-model="user.name"
+          v-model="user.password"
+          type='password'
           required
         ></b-form-input>
       </b-form-group>
@@ -56,6 +57,7 @@
       >
         <b-form-input
           id="confirmPassword"
+          type="password"
           v-model="user.confirmPassword"
           required
         ></b-form-input>
@@ -67,6 +69,7 @@
   </div>
 </template>
 <script>
+  import { mapActions } from 'vuex';
   export default {
     name: 'Signup',
      data() {
@@ -81,9 +84,22 @@
       }
     },
     methods: {
-      onSubmit(evt) {
-      },
-      onReset(evt) {
+      ...mapActions(['register']),
+      onSubmit() {
+        if(this.user.password !== this.user.confirmPassword) {
+          alert('password and confirm password does not match')
+          return
+        }
+
+        let user = { firstName: this.user.firstName, lastName: this.user.lastName, email: this.user.email, password: this.user.password}
+       this.register(user)
+        .then(res => {
+          alert('Signup successfully!')
+          this.$router.push('/dashboard');
+        })
+        .catch(error => {
+          alert('There is something went wrong!')
+        })
       }
     }
   }

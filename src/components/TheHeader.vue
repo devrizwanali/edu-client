@@ -22,17 +22,34 @@
             class="heading nav-link"
           >Help/FAQs</router-link>
         </li>
+        <b-nav-item-dropdown right v-if="isLoggedIn">
+          <template #button-content>
+            <em>{{currentUser.firstName}} {{currentUser.lastName}}</em>
+          </template>
+          <b-dropdown-item @click="LogOut">Log Out</b-dropdown-item>
+        </b-nav-item-dropdown>
       </b-navbar-nav>
+      </b-navbar-nav>
+
     </b-collapse>
   </b-navbar>
 </template>
 <script>
+  import { mapGetters, mapActions } from 'vuex';
   export default {
     name: 'Header',
     methods: {
+      ...mapActions(['signOut']),
       goToHome () {
         this.$router.push('/')
+      },
+      LogOut() {
+        this.signOut()
+        this.$router.push('/login')
       }
+    },
+    computed: {
+      ...mapGetters(['isLoggedIn', 'currentUser'])
     }
   }
 </script>

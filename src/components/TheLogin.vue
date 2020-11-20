@@ -2,7 +2,7 @@
   <div class="center mt-4">
   	<b-card class="main-card">
   	<h1 class="text-center mb-4">Login</h1>
-     <b-form @submit.prevent="onSubmit">
+     <b-form @submit.prevent="loginUser">
       <b-form-group
         label="Email"
         label-for="email"
@@ -21,6 +21,7 @@
       >
         <b-form-input
           id="password"
+          type="password"
           v-model="user.password"
           required
         ></b-form-input>
@@ -31,6 +32,7 @@
   </div>
 </template>
 <script>
+  import { mapActions } from 'vuex';
   export default {
     name: 'Login',
      data() {
@@ -42,7 +44,16 @@
       }
     },
     methods: {
-      onSubmit() {
+      ...mapActions(['login']),
+      loginUser() {
+       this.login(this.user)
+        .then(res => {
+          alert('Login successfully!')
+          this.$router.push('/dashboard');
+        })
+        .catch(error => {
+          alert('Invalid email or password!')
+        })
       }
     }
   }

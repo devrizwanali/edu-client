@@ -24,6 +24,26 @@ export default new Router({
       path: '/help',
       name: 'Help',
       component: () => import('@/components/TheHelp')
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: () => import('@/components/TheSuggestions')
+    },
+    {
+      path: '/create',
+      name: 'create',
+      component: () => import('@/components/SuggestionsNew')
+    },
+    {
+      path: '/edit',
+      name: 'Edit',
+      component: () => import('@/components/SuggestionsEdit')
+    },
+    {
+      path: '/show/:id',
+      name: 'Show',
+      component: () => import('@/components/SuggestionsItem')
     }
   ],
   mode: 'history'

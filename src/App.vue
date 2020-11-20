@@ -44,4 +44,8 @@ export default {
   margin-bottom: -100px;
   padding-bottom: 100px;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
 </style>
