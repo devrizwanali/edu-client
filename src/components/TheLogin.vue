@@ -48,7 +48,6 @@
       loginUser() {
        this.login(this.user)
         .then(res => {
-          alert('Login successfully!')
           this.$router.push('/dashboard');
         })
         .catch(error => {

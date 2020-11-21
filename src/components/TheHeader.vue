@@ -16,21 +16,16 @@
             class="heading nav-link"
           >Register</router-link>
         </li>
+        <li class="nav-item" v-if="isLoggedIn">
+          <a @click="LogOut" class="heading nav-link">Logout</a>
+        </li>
         <li class="nav-item">
           <router-link 
             :to="{ name: 'Help' }"
             class="heading nav-link"
           >Help/FAQs</router-link>
         </li>
-        <b-nav-item-dropdown right v-if="isLoggedIn">
-          <template #button-content>
-            <em>{{currentUser.firstName}} {{currentUser.lastName}}</em>
-          </template>
-          <b-dropdown-item @click="LogOut">Log Out</b-dropdown-item>
-        </b-nav-item-dropdown>
       </b-navbar-nav>
-      </b-navbar-nav>
-
     </b-collapse>
   </b-navbar>
 </template>
@@ -50,7 +45,7 @@
     },
     computed: {
       ...mapGetters(['isLoggedIn', 'currentUser'])
-    }
+    },
   }
 </script>
 <style>

@@ -49,7 +49,7 @@ const actions = {
 
 const getters = {
   isLoggedIn: state => {
-    if(state.user) 
+    if(state.user || localStorage.getItem('token')) 
       return true;
     else 
       return false;

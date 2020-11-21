@@ -1,7 +1,6 @@
 <template>
   <div class="center mt-4">
-    <b-card class="main-card">
-    <h1 class="text-center mb-4">Edit suggestion/complaint </h1>
+    <b-card class="main-card" v-if="suggestionObj">
      <b-form @submit.prevent="onSubmit">
       <b-form-group
         label="Title"
@@ -9,7 +8,7 @@
       >
         <b-form-input
           id="title"
-          v-model="sugesstion.title"
+          v-model="suggestionObj.title"
           type="text"
           required
         ></b-form-input>
@@ -21,7 +20,7 @@
       >
         <b-form-textarea
           id="textarea"
-          v-model="sugesstion.description"
+          v-model="suggestionObj.description"
           placeholder="Enter something..."
           rows="3"
           max-rows="6"
@@ -33,19 +32,37 @@
   </div>
 </template>
 <script>
+  import {mapGetters, mapActions } from 'vuex'
   export default {
     name: 'Login',
-     data() {
-      return {
-        sugesstion: {
-          title: '',
-          description: '',
-        }
+    data() {
+      return  {
+        suggestionObj: null
       }
     },
-    methods: {
-      onSubmit() {
+    computed: {
+      ...mapGetters(['suggestion'])
+    },
+    watch: {
+      suggestion: function() {
+        this.suggestionObj = Object.assign({}, this.suggestion);
       }
+    },
+    mounted() {
+      this.$store.dispatch('getSuggestion', this.$route.params.id)
+    },
+    methods: {
+      ...mapActions(['updateSuggestion']),
+      onSubmit() {
+        this.updateSuggestion({id: this.$route.params.id, suggestion: this.suggestionObj})
+          .then(res => {
+            alert('Updated successfully!')
+            this.$router.push('/dashboard')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
     }
   }
 </script>

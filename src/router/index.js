@@ -47,13 +47,14 @@ const router =  new Router({
 
 
 router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
   if (to.fullPath === '/dashboard' || to.name === 'Edit' || to.name === 'Show') {
-    if (!store.state.user) {
+    if (!token) {
       next('/login');
     }
   }
   if (to.fullPath === '/login') {
-    if (store.state.user) {
+    if (token) {
       next('/dashboard');
     }
   }

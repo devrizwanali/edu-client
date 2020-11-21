@@ -6,7 +6,7 @@
     <b-row>
       <div class="center mt-4">
         <b-card class="main-card">
-          <b-form @submit.prevent="createSuggestion">
+          <b-form @submit.prevent="onCreateSuggestion">
             <b-form-group label="Suggestion" label-for="description">
               <b-form-input
                 id="suggestion"
@@ -62,13 +62,13 @@
         <h1 class="text-center mb-4">Suggestions</h1>
         <b-table bordered hover :fields="fields" :items="suggestions">
           <template #cell(actions)="data" class="text-center">
-            <b-button variant="outline-primary" @click="show" size="sm"
+            <b-button variant="outline-primary" @click="show(data.item._id, 'suggestion')" size="sm"
               >Details</b-button
             >
-            <b-button variant="outline-info" @click="edit" size="sm"
+            <b-button variant="outline-info" @click="edit(data.item._id, 'suggestion')" size="sm"
               >Edit</b-button
             >
-            <b-button variant="outline-danger" @click="deleteSU" size="sm"
+            <b-button variant="outline-danger" @click="deleteSU(data.item._id, 'suggestion')" size="sm"
               >Delete</b-button
             >
           </template>
@@ -76,16 +76,16 @@
       </b-card-text>
 
       <b-card-text style="width: 48%" class="ml-5">
-        <h1 class="text-center mb-4">Expreences</h1>
-        <b-table bordered hover :fields="fields" :items="suggestions">
+        <h1 class="text-center mb-4">Experience</h1>
+        <b-table bordered hover :fields="fields" :items="experiences">
           <template #cell(actions)="data" class="text-center">
-            <b-button variant="outline-primary" @click="show" size="sm"
+            <b-button variant="outline-primary" @click="show(data.item.id, 'experience')" size="sm"
               >Details</b-button
             >
-            <b-button variant="outline-info" @click="edit" size="sm"
+            <b-button variant="outline-info" @click="edit(data.item.id, 'experience')" size="sm"
               >Edit</b-button
             >
-            <b-button variant="outline-danger" @click="deleteSU" size="sm"
+            <b-button variant="outline-danger" @click="deleteSU(data.item.id, 'experience')" size="sm"
               >Delete</b-button
             >
           </template>
@@ -95,7 +95,8 @@
   </b-card>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import axios from './../axios'
 export default {
   name: "",
   data() {
@@ -113,25 +114,36 @@ export default {
         "description",
         { key: "actions", label: "Actions", tdClass: "text-center" }
       ],
-      suggestions: [
-        { title: "Dickerson", description: "Macdonald" },
-        { title: "Larsen", description: "Shaw" },
-        { title: "Geneva", description: "Wilson" },
-        { title: "Larsen", description: "Shaw" },
-        { title: "Geneva", description: "Wilson" },
-        { title: "Jami", description: "Carney" }
-      ]
     };
   },
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn', 'suggestions', 'experiences'])
   },
   methods: {
-    show() {},
-    edit() {},
-    deleteSU() {},
-    createSuggestion() {
-
+    ...mapActions(['deleteSuggestion', 'createSuggestion']),
+    show(id, type) {
+      this.$router.push({name: 'Show', params: {id: id}})
+    },
+    edit(id) {
+      this.$router.push({name: 'Edit', params: {id: id}})
+    },
+    deleteSU(id, type) {
+      this.deleteSuggestion(id).then(res => {
+        // alert(type + ' deleted successfully!');
+      })
+      .catch(error  => {
+        console.log(error)
+      })
+    },
+    onCreateSuggestion() {
+      this.createSuggestion(this.suggestion)
+      .then(res => {
+        alert('Suggestion created successfully!');
+        this.suggestion = {}
+      })
+      .catch(error  => {
+        console.log(error)
+      })
     },
     createExperience() {
       
@@ -141,6 +153,7 @@ export default {
     if(!this.isLoggedIn){
       this.$router.push('/login')
     }
+    this.$store.dispatch('getSuggestions')
   }
 };
 </script>
