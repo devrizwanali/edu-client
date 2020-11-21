@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store/index'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   routes: [
     {
       path: '/',
@@ -28,23 +29,35 @@ export default new Router({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: () => import('@/components/TheSuggestions')
+      component: () => import('@/components/TheDashboard')
     },
     {
-      path: '/create',
-      name: 'create',
-      component: () => import('@/components/SuggestionsNew')
-    },
-    {
-      path: '/edit',
+      path: '/edit/:id',
       name: 'Edit',
       component: () => import('@/components/SuggestionsEdit')
     },
     {
       path: '/show/:id',
       name: 'Show',
-      component: () => import('@/components/SuggestionsItem')
+      component: () => import('@/components/SuggestionsDetails')
     }
   ],
   mode: 'history'
 })
+
+
+router.beforeEach((to, from, next) => {
+  if (to.fullPath === '/dashboard' || to.name === 'Edit' || to.name === 'Show') {
+    if (!store.state.user) {
+      next('/login');
+    }
+  }
+  if (to.fullPath === '/login') {
+    if (store.state.user) {
+      next('/dashboard');
+    }
+  }
+  next();
+})
+
+export default router;

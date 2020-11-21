@@ -32,13 +32,13 @@
       </div>
       <div class="center mt-4">
         <b-card class="main-card">
-          <b-form @submit.prevent="createComplaint">
-            <b-form-group label="Complaint" label-for="description">
+          <b-form @submit.prevent="createExperience">
+            <b-form-group label="experience" label-for="description">
               <b-form-input
-                id="complaint"
+                id="experience"
                 placeholder="Title"
                 type="text"
-                v-model="complaint.title"
+                v-model="experience.title"
                 class="mb-3"
                 required
               ></b-form-input>
@@ -46,7 +46,7 @@
                 id="textarea"
                 placeholder="Enter something..."
                 rows="3"
-                v-model="complaint.description"
+                v-model="experience.description"
                 max-rows="6"
                 required
               ></b-form-textarea>
@@ -76,7 +76,7 @@
       </b-card-text>
 
       <b-card-text style="width: 48%" class="ml-5">
-        <h1 class="text-center mb-4">Complaints</h1>
+        <h1 class="text-center mb-4">Expreences</h1>
         <b-table bordered hover :fields="fields" :items="suggestions">
           <template #cell(actions)="data" class="text-center">
             <b-button variant="outline-primary" @click="show" size="sm"
@@ -104,7 +104,7 @@ export default {
         title: '',
         description: ''
       },
-      complaint: {
+      experience: {
         title: '',
         description: ''
       },
@@ -133,7 +133,7 @@ export default {
     createSuggestion() {
 
     },
-    createComplaint() {
+    createExperience() {
       
     }
   },
