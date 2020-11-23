@@ -32,14 +32,24 @@ const router =  new Router({
       component: () => import('@/components/TheDashboard')
     },
     {
-      path: '/edit/:id',
-      name: 'Edit',
+      path: '/edit-suggestion/:id',
+      name: 'EditSuggestion',
       component: () => import('@/components/SuggestionsEdit')
     },
     {
-      path: '/show/:id',
-      name: 'Show',
+      path: '/show-suggestion/:id',
+      name: 'ShowSuggestion',
       component: () => import('@/components/SuggestionsDetails')
+    },
+    {
+      path: '/edit-experience/:id',
+      name: 'EditExperience',
+      component: () => import('@/components/ExperienceEdit')
+    },
+    {
+      path: '/show-experience/:id',
+      name: 'ShowExperience',
+      component: () => import('@/components/ExperienceDetails')
     }
   ],
   mode: 'history'
@@ -48,7 +58,7 @@ const router =  new Router({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
-  if (to.fullPath === '/dashboard' || to.name === 'Edit' || to.name === 'Show') {
+  if (to.fullPath === '/dashboard' || to.name === 'EditSuggestion' || to.name === 'ShowSuggestion' || to.name === 'EditExperience' || to.name === 'ShowExperience') {
     if (!token) {
       next('/login');
     }

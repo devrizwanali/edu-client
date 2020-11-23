@@ -34,6 +34,29 @@ const actions = {
      .catch(error => {
        console.log(error)
      })
+  },
+
+  async updateExperience({commit}, params) {
+    const res =  await axios.put(`http://localhost:3000/api/experiences/${params.id}`, params.experience)
+    return res
+  },
+
+  async deleteExperience({commit}, id) {
+    const res =  await axios.delete(`http://localhost:3000/api/experiences/${id}`)
+    if(res.data) {
+      const suggest = state.experiences.find(x => x.id === id)
+      let index = state.experiences.indexOf(suggest)
+      const experiences = state.experiences.slice(0, index)
+      commit('SET_EXPERIENCES', experiences)
+    }
+  },
+
+  async createExperience({commit, state}, experience) {
+    const res = await axios.post(`http://localhost:3000/api/experiences`, experience)
+    if(res.data) {
+      state.experiences.push(res.data.experience)
+    }
+    return res;
   }
 };
 

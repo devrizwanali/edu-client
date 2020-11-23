@@ -6,13 +6,13 @@ const state = {
 };
 
 const mutations = {
-  LOGIN_USER(state, user, token) {
-    state.user = user;
-    state.token = token;
+  LOGIN_USER(state, data) {
+    state.user = data.user;
+    state.token = data.token;
   },
-  REGISTER_USER(state, user, token) {
-    state.user = user;
-    state.token = token;
+  REGISTER_USER(state, data) {
+    state.user = data.user;
+    state.token = data.token;
   },
   LOGOUT_USER(state) {
     state.user = null,
@@ -21,21 +21,25 @@ const mutations = {
 };
 
 const actions = {
-  async login({ commit }, user) {
-    const res = await axios.post('http://localhost:3000/api/login', user);
-    //save token to localStorage
-    localStorage.setItem('token', res.data.token);
-    commit('LOGIN_USER', res.data.user, res.data.token);
-     
-    return res;
+  async login({ commit, dispatch }, user) {
+    const response = await axios.post('http://localhost:3000/api/login', user);
+    if(response.data) {
+      localStorage.setItem('token', response.data.token);
+      dispatch('setAuth');
+      const data = {user: response.data.user, token: response.data.token}
+      commit('LOGIN_USER', data);
+    }
+    return response;
   },
 
-  async register({ commit }, user) {
+  async register({ commit, dispatch }, user) {
     const response = await axios.post('http://localhost:3000/api/register', user)
-    //save token to localStorage 
-    localStorage.setItem('token', response.data.token);
-    commit('REGISTER_USER', response.data.user, response.data.token);
-
+    if(response.data) {
+      localStorage.setItem('token', response.data.token);
+      dispatch('setAuth');
+      const data = {user: response.data.user, token: response.data.token}
+      commit('REGISTER_USER',data);
+    }
     return response;
   },
 
@@ -44,6 +48,11 @@ const actions = {
   
     localStorage.removeItem('token')
     delete axios.defaults.headers.common['Authorization'];
+  },
+
+  setAuth() {
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common['Authorization']= `Bearer ${token}`
   }
 };
 

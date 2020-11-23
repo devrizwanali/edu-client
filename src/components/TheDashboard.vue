@@ -32,7 +32,7 @@
       </div>
       <div class="center mt-4">
         <b-card class="main-card">
-          <b-form @submit.prevent="createExperience">
+          <b-form @submit.prevent="onCreateExperience">
             <b-form-group label="experience" label-for="description">
               <b-form-input
                 id="experience"
@@ -62,10 +62,10 @@
         <h1 class="text-center mb-4">Suggestions</h1>
         <b-table bordered hover :fields="fields" :items="suggestions">
           <template #cell(actions)="data" class="text-center">
-            <b-button variant="outline-primary" @click="show(data.item._id, 'suggestion')" size="sm"
+            <b-button variant="outline-primary" @click="show(data.item._id, 'ShowSuggestion')" size="sm"
               >Details</b-button
             >
-            <b-button variant="outline-info" @click="edit(data.item._id, 'suggestion')" size="sm"
+            <b-button variant="outline-info" @click="edit(data.item._id, 'EditSuggestion')" size="sm"
               >Edit</b-button
             >
             <b-button variant="outline-danger" @click="deleteSU(data.item._id, 'suggestion')" size="sm"
@@ -79,13 +79,13 @@
         <h1 class="text-center mb-4">Experience</h1>
         <b-table bordered hover :fields="fields" :items="experiences">
           <template #cell(actions)="data" class="text-center">
-            <b-button variant="outline-primary" @click="show(data.item.id, 'experience')" size="sm"
+            <b-button variant="outline-primary" @click="show(data.item._id, 'ShowExperience')" size="sm"
               >Details</b-button
             >
-            <b-button variant="outline-info" @click="edit(data.item.id, 'experience')" size="sm"
+            <b-button variant="outline-info" @click="edit(data.item._id, 'EditExperience')" size="sm"
               >Edit</b-button
             >
-            <b-button variant="outline-danger" @click="deleteSU(data.item.id, 'experience')" size="sm"
+            <b-button variant="outline-danger" @click="deleteSU(data.item._id, 'experience')" size="sm"
               >Delete</b-button
             >
           </template>
@@ -120,20 +120,18 @@ export default {
     ...mapGetters(['isLoggedIn', 'suggestions', 'experiences'])
   },
   methods: {
-    ...mapActions(['deleteSuggestion', 'createSuggestion']),
-    show(id, type) {
-      this.$router.push({name: 'Show', params: {id: id}})
+    ...mapActions(['deleteSuggestion', 'createSuggestion', 'deleteExperience', 'createExperience']),
+    show(id, route) {
+      this.$router.push({name: route, params: {id: id}})
     },
-    edit(id) {
-      this.$router.push({name: 'Edit', params: {id: id}})
+    edit(id, route) {
+      this.$router.push({name: route, params: {id: id}})
     },
     deleteSU(id, type) {
-      this.deleteSuggestion(id).then(res => {
-        // alert(type + ' deleted successfully!');
-      })
-      .catch(error  => {
-        console.log(error)
-      })
+      if(type == 'suggestion')
+        this.deleteSuggestion(id);
+      else 
+        this.deleteExperience(id);
     },
     onCreateSuggestion() {
       this.createSuggestion(this.suggestion)
@@ -145,8 +143,15 @@ export default {
         console.log(error)
       })
     },
-    createExperience() {
-      
+    onCreateExperience() {
+      this.createExperience(this.experience)
+      .then(res => {
+        alert('Experience created successfully!');
+        this.experience = {}
+      })
+      .catch(error  => {
+        console.log(error)
+      })
     }
   },
   created() {
@@ -154,6 +159,7 @@ export default {
       this.$router.push('/login')
     }
     this.$store.dispatch('getSuggestions')
+    this.$store.dispatch('getExperiences')
   }
 };
 </script>
